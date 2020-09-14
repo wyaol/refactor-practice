@@ -8,11 +8,15 @@ public class Direction {
     }
 
     public Direction turnRight() {
+        return getDirection('E', 'W');
+    }
+
+    private Direction getDirection(char e, char w) {
         switch (direction) {
             case 'N':
-                return new Direction('E');
+                return new Direction(e);
             case 'S':
-                return new Direction('W');
+                return new Direction(w);
             case 'E':
                 return new Direction('N');
             case 'W':
@@ -23,18 +27,7 @@ public class Direction {
     }
 
     public Direction turnLeft() {
-        switch (direction) {
-            case 'N':
-                return new Direction('W');
-            case 'S':
-                return new Direction('E');
-            case 'E':
-                return new Direction('N');
-            case 'W':
-                return new Direction('S');
-            default:
-                throw new IllegalArgumentException();
-        }
+        return getDirection('W', 'E');
     }
 
     @Override
