@@ -24,7 +24,8 @@ public class Customer {
 		double totalAmount = 0;
 		int frequentRenterPoints = 0;
 		Iterator<Rental> rentals = rentalList.iterator();
-		String result = "Rental Record for " + getName() + "\n";
+		final String nextLine = "\n";
+		String result = "Rental Record for " + getName() + nextLine;
 		while (rentals.hasNext()) {
 			double thisAmount = 0;
 			Rental each = rentals.next();
@@ -32,18 +33,13 @@ public class Customer {
 			// determine amounts for each line
 			switch (each.getMovie().getPriceCode()) {
 			case Movie.REGULAR:
-				thisAmount += 2;
-				if (each.getDaysRented() > 2)
-					thisAmount += (each.getDaysRented() - 2) * 1.5;
+				thisAmount = getThisAmount(thisAmount, each, 2, 2);
 				break;
-			case Movie.NEW_RELEASE:
+				case Movie.NEW_RELEASE:
 				thisAmount += each.getDaysRented() * 3;
 				break;
 			case Movie.CHILDRENS:
-				thisAmount += 1.5;
-				if (each.getDaysRented() > 3)
-					thisAmount += (each.getDaysRented() - 3) * 1.5;
-				break;
+				thisAmount = getThisAmount(thisAmount, each, 1.5, 3);
 
 			}
 
@@ -55,16 +51,27 @@ public class Customer {
 				frequentRenterPoints++;
 
 			// show figures for this rental
-			result += "\t" + each.getMovie().getTitle() + "\t"
-					+ String.valueOf(thisAmount) + "\n";
+			final String tableChar = "\t";
+			result += tableChar + each.getMovie().getTitle() + tableChar
+					+ String.valueOf(thisAmount) + nextLine;
 			totalAmount += thisAmount;
 
 		}
 		// add footer lines
-		result += "Amount owed is " + String.valueOf(totalAmount) + "\n";
-		result += "You earned " + String.valueOf(frequentRenterPoints)
-				+ " frequent renter points";
+		final String amountOwed = "Amount owed is ";
+		result += amountOwed + String.valueOf(totalAmount) + nextLine;
+		final String youEarned = "You earned ";
+		final String renterPoints = " frequent renter points";
+		result += youEarned + String.valueOf(frequentRenterPoints)
+				+ renterPoints;
 		return result;
+	}
+
+	private double getThisAmount(double thisAmount, Rental each, double i, int i2) {
+		thisAmount += i;
+		if (each.getDaysRented() > i2)
+			thisAmount += (each.getDaysRented() - i2) * 1.5;
+		return thisAmount;
 	}
 
 }
